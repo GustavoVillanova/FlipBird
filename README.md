@@ -79,11 +79,11 @@ This project uses **Pylint** for static code analysis to ensure code quality and
 
 ### Steps to Configure and Run Pylint
 
-1. **Install Pylint**  
+1. **Install Pylint**
    Make sure `pylint` is installed in your virtual environment:
    ```bash
    pip install pylint
-2. **Generate and Configure the .pylintrc File.** 
+2. **Generate and Configure the .pylintrc File.**
    If the `.pylintrc` file is not present in the repository, you can generate it:
    ```bash
     pylint --generate-rcfile > .pylintrc
@@ -93,3 +93,23 @@ This project uses **Pylint** for static code analysis to ensure code quality and
 To check the code quality:
     ```bash
     pylint --generate-rcfile > .pylintrc
+---
+## Configuring and Running the Hooks
+1. **Install Pre-Commit**
+Install the `pre-commit` library in your virtual environment:
+    ```bash
+    pip install pre-commit
+2. **Create the Configuration File**
+A `.pre-commit-config.yaml` file **is already included** in this repository. It defines the pylint hook for static analysis. The content of the file is as follows:
+    ```bash
+    repos:
+    - repo: https://github.com/pre-commit/mirrors-pylint
+        rev: v2.15.10
+        hooks:
+        - id: pylint
+3. **Install the Hooks**
+Run the following command to install the pre-commit hooks in the repository:
+    ```bash
+    pre-commit install
+4. **Running Pre-Commit Hooks**
+The hooks will run automatically before every git commit.

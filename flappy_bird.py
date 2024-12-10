@@ -1,6 +1,13 @@
-import pygame
+"""
+Flappy Bird Game
+
+This module implements the Flappy Bird game using Pygame.
+It includes the Bird, Pipe, and Base classes, as well as the main game loop.
+"""
+
 import os
 import random
+import pygame
 
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 800
@@ -19,6 +26,12 @@ SCORE_FONT = pygame.font.SysFont('arial', 50)
 
 
 class Bird:
+
+    """
+    Represents the bird in the Flappy Bird game.
+    Handles its movement, rotation, and drawing.
+    """
+
     IMGS = BIRD_IMAGES
     # rotation animation
     MAX_ROTATION = 25
@@ -36,6 +49,11 @@ class Bird:
         self.image = self.IMGS[0]
 
     def jump(self):
+
+        """
+        Makes the bird jump upwards by adjusting its velocity.
+        """
+
         self.speed = -10.5
         self.time = 0
         self.height = self.y
@@ -43,6 +61,12 @@ class Bird:
 
 
     def move(self):
+
+        """
+        Calculates and updates the bird's position based on its speed and time.
+        Adjusts the bird's angle depending on its movement.
+        """
+
         # calculate displacement
         self.time += 1
         displacement = 1.5 * (self.time**2) + self.speed * self.time
@@ -57,8 +81,7 @@ class Bird:
 
         # bird's angle
         if displacement < 0 or self.y < (self.height + 50):
-            if self.angle < self.MAX_ROTATION:
-                self.angle = self.MAX_ROTATION
+            self.angle = max(self.angle, self.MAX_ROTATION)
         else:
             if self.angle > -90:
                 self.angle -= self.ROTATION_SPEED
@@ -94,6 +117,12 @@ class Bird:
         return pygame.mask.from_surface(self.image)
 
 class Pipe:
+
+    """
+    Represents a pipe obstacle in the Flappy Bird game.
+    Handles the pipe's position, movement, and collision detection.
+    """
+
     DISTANCE = 200
     SPEED = 5
 
@@ -120,6 +149,18 @@ class Pipe:
         screen.blit(self.PIPE_BOTTOM, (self.x, self.bottom_pos))
 
     def collide(self, bird):
+
+        """
+        Checks if the pipe collides with the bird.
+        Uses masks for pixel-perfect collision detection.
+
+        Args:
+            bird (Bird): The bird object to check for collision.
+
+        Returns:
+            bool: True if there's a collision, False otherwise.
+        """
+
         bird_mask = bird.get_mask()
         top_mask = pygame.mask.from_surface(self.PIPE_TOP)
         bottom_mask = pygame.mask.from_surface(self.PIPE_BOTTOM)
@@ -170,6 +211,22 @@ def draw_screen(screen, birds, pipes, ground, score):
     ground.draw(screen)
     pygame.display.update()
 
+def game_over_screen(screen, score):
+    text = SCORE_FONT.render(
+        f"Game Over! Score: {score}",
+        True,
+        (255, 255, 255)
+    )
+    screen.blit(BACKGROUND_IMAGE, (0, 0))
+    screen.blit(
+        text,
+        (
+            SCREEN_WIDTH // 2 - text.get_width() // 2,
+            SCREEN_HEIGHT // 2 - text.get_height() // 2
+        )
+    )
+    pygame.display.update()
+    pygame.time.delay(3000)
 
 def main():
     birds = [Bird(230, 350)]
@@ -205,6 +262,7 @@ def main():
             for i, bird in enumerate(birds):
                 if pipe.collide(bird):
                     birds.pop(i)
+                    game_over_screen(screen, score)
                     main()
                 if not pipe.passed and bird.x > pipe.x:
                     pipe.passed = True
@@ -222,6 +280,7 @@ def main():
         for i, bird in enumerate(birds):
             if (bird.y + bird.image.get_height()) > ground.y or bird.y < 0:
                 birds.pop(i)
+                game_over_screen(screen, score)
                 main()
 
         draw_screen(screen, birds, pipes, ground, score)

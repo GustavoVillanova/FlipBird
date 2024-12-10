@@ -21,12 +21,10 @@ The project is hosted on GitHub: [FlipBird](git@github.com:GustavoVillanova/Flip
    ```bash
    git clone git@github.com:GustavoVillanova/FlipBird.git
    cd FlipBird
-
 2. **Install dependencies:** Use the requirements.txt file to install all necessary dependencies:
 
     ```bash
     pip install -r requirements.txt
-
 3. **Verify media files:** Ensure the imgs folder contains these images:
 
 - pipe.png (image of the pipes)
@@ -34,18 +32,19 @@ The project is hosted on GitHub: [FlipBird](git@github.com:GustavoVillanova/Flip
 - bg.png (background image)
 - bird1.png, bird2.png, bird3.png (images for the bird animation)
 
----
-
 4. **Run the game:**
 
     ```bash
-    python main.py
+    python FlappyBird.py
+---
 
 ### How to Play
 - **Starting the Game:** The game starts automatically when executed.
 - **Controls:**
 - - Press the space bar to make the bird jump.
 - - **Objective:** Guide the bird through the pipes without colliding. If a collision occurs, the game restarts automatically.
+
+---
 
 ### Next Steps
 The project will progress in two phases:
@@ -60,9 +59,37 @@ The project will progress in two phases:
 - AI will be developed using reinforcement learning techniques.
 - The AI will autonomously learn to play the game, avoiding collisions and maximizing the score.
 
+---
+
 ### Contribution
 Contributions are welcome! Feel free to open issues, suggest improvements, or submit pull requests.
+
+---
 
 ### Technologies Used
 - Python
 - Pygame
+
+---
+
+## Code Quality and Static Analysis
+
+### Configuring Pylint
+This project uses **Pylint** for static code analysis to ensure code quality and standardization.
+
+### Steps to Configure and Run Pylint
+
+1. **Install Pylint**  
+   Make sure `pylint` is installed in your virtual environment:
+   ```bash
+   pip install pylint
+2. **Generate and Configure the .pylintrc File.** 
+   If the `.pylintrc` file is not present in the repository, you can generate it:
+   ```bash
+    pylint --generate-rcfile > .pylintrc
+- The `.pylintrc` file **is already included** in the repository for your convenience. It contains custom rules for the project.
+
+3. **Run Pylint**
+To check the code quality:
+    ```bash
+    pylint --generate-rcfile > .pylintrc

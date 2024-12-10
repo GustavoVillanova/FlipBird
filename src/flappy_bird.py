@@ -10,8 +10,6 @@ import random
 import logging
 import pygame
 
-
-# Configurar o logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 SCREEN_WIDTH = 500
@@ -28,7 +26,6 @@ BIRD_IMAGES = [
 
 pygame.font.init()
 SCORE_FONT = pygame.font.SysFont('arial', 50)
-
 
 class Bird:
 

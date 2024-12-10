@@ -7,7 +7,12 @@ It includes the Bird, Pipe, and Base classes, as well as the main game loop.
 
 import os
 import random
+import logging
 import pygame
+
+
+# Configurar o logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 800
@@ -47,6 +52,7 @@ class Bird:
         self.time = 0
         self.image_count = 0
         self.image = self.IMGS[0]
+        logging.info(f"Bird initialized at position ({self.x}, {self.y}).")
 
     def jump(self):
 
@@ -57,7 +63,7 @@ class Bird:
         self.speed = -10.5
         self.time = 0
         self.height = self.y
-
+        logging.debug("Bird jumped.")
 
 
     def move(self):
@@ -229,6 +235,7 @@ def game_over_screen(screen, score):
     pygame.time.delay(3000)
 
 def main():
+    logging.info("Game started.")
     birds = [Bird(230, 350)]
     ground = Ground(730)
     pipes = [Pipe(700)]
@@ -273,6 +280,7 @@ def main():
 
         if add_pipe:
             score += 1
+            logging.info(f"Score updated: {score}")
             pipes.append(Pipe(600))
         for pipe in remove_pipes:
             pipes.remove(pipe)

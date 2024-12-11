@@ -113,3 +113,23 @@ Run the following command to install the pre-commit hooks in the repository:
     pre-commit install
 4. **Running Pre-Commit Hooks**
 The hooks will run automatically before every git commit.
+---
+## Generating Documentation
+
+### Prerequisites
+1. **Sphinx**: Ensure Sphinx is installed in your environment:
+   ```bash
+   pip install sphinx
+### Steps to Generate Documentation
+1. **Navigate to the Project Directory:**
+Make sure you are in the project's root directory.
+2. **Generate Documentation Source Files:**
+Run the following command to generate the source .rst files from the code:
+    ```bash
+    sphinx-apidoc -o docs/source .
+3. **Build the Documentation:**
+Generate the documentation in HTML format using:
+    ```bash
+    sphinx-build -b html docs/source docs/build
+4. **View the Documentation:**
+Open the file docs/build/index.html in your browser to view the generated documentation.

@@ -345,6 +345,30 @@ def game_over_screen(screen, score):
     pygame.display.update()
     pygame.time.delay(3000)
 
+def show_start_screen(screen):
+    title_font = pygame.font.SysFont("arial", 60)
+    instruction_font = pygame.font.SysFont("arial", 40)
+
+    # Mensagens da tela inicial
+    title_text = title_font.render("FlipBird", True, (255, 255, 255))
+    instruction_text = instruction_font.render("Press SPACE to Start", True, (255, 255, 255))
+
+    while True:
+        screen.blit(BACKGROUND_IMAGE, (0, 0))
+        screen.blit(title_text, (SCREEN_WIDTH // 2 - title_text.get_width() // 2, SCREEN_HEIGHT // 3))
+        screen.blit(instruction_text, (SCREEN_WIDTH // 2 - instruction_text.get_width() // 2, SCREEN_HEIGHT // 2))
+
+        pygame.display.update()
+
+        # Verifica eventos para iniciar o jogo
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    return
+
 def main():
     """
     The main function for running the Flappy Bird game loop.
@@ -382,6 +406,8 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     score = 0
     clock = pygame.time.Clock()
+
+    show_start_screen(screen)
 
     running = True
     while running:

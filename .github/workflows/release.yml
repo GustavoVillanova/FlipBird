@@ -1,0 +1,60 @@
+name: Release Workflow
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Tests
+        run: python -m unittest discover -s tests
+
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          git fetch --tags
+          last_tag=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "v0.0.0")
+          if git rev-parse "$last_tag" >/dev/null 2>&1; then
+            git log $last_tag..HEAD --pretty=format:"- %s" > changelog.md
+          else
+            git log HEAD --pretty=format:"- %s" > changelog.md
+          fi
+          echo "::set-output name=changelog::$(cat changelog.md)"
+
+      - name: Create GitHub Release
+        if: matrix.python-version == '3.11'
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Artifacts
+        if: matrix.python-version == '3.11'
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build Artifacts (Python ${{ matrix.python-version }})
+          path: build/

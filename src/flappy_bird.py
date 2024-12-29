@@ -198,7 +198,7 @@ class Pipe:
         """
         Sets the height of the pipes randomly and updates their positions.
         """
-        self.height = random.randrange(50, 475)
+        self.height = random.randrange(50, 475) # nosec
         self.top_pos = self.height - self.PIPE_TOP.get_height()
         self.bottom_pos = self.height + self.DISTANCE
 

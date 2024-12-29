@@ -1,0 +1,41 @@
+name: Code Analysis for Multiple Python Versions
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  analysis:
+    name: Run Code Analysis in Matrix
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint bandit detect-secrets
+
+      - name: Run Pylint (Code Style and Smells)
+        run: pylint src/*.py
+
+      - name: Run Bandit (Security Analysis)
+        run: bandit -r src/
+
+      - name: Run Detect-Secrets (Secrets Detection)
+        run: detect-secrets scan
